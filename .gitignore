@@ -1,0 +1,37 @@
+# Byte-compiled / optimized files
+*.pyc
+__pycache__/
+
+# Logs
+*.log
+
+# Environment
+.env
+venv/
+.env.*
+
+# Dependencies
+/.venv
+/.env
+
+# Build artifacts
+/build/
+dist/
+
+# Coverage reports
+htmlcov/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Miscellaneous
+*.swp
+*.swo
+.DS_Store
+/data

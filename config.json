@@ -1,0 +1,11 @@
+{
+  "pretrained": "facebook/bart-base",
+  "learning_rate": 4e-5,
+  "epoch_num": 3,
+  "train_batch_size": 64,
+  "eval_batch_size": 64,
+  "weight_decay": 0.01,
+  "seed": 10,
+  "decoder_max_length": 80,
+  "save_folder": "models/v5"
+}
