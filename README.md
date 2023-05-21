@@ -28,7 +28,7 @@ Before starting the training process, you need to prepare a dataset of titles. E
 
 #### 2.2 Configuration
 
-Before training the model, make sure to configure the following parameters:
+Before training the model, you need to create a json file with the same format like config.json, this will include required information for training:
 
 
 ```shell
@@ -54,9 +54,10 @@ Here's a brief explanation of each parameter:
 * eval_batch_size: The batch size for evaluation data. Adjust as needed.
 * model_dir: The folder where the trained model will be saved.
 * file_train: The path to the text file containing the training data.
-* temp_data_folder: Folder to save data training
+* temp_data_folder: Folder to save generated training data.
 
-Make sure to update these parameters according to your specific requirements before initiating the training process.
+Currently, train_batch_size is set as 96 to fit a GPU with 12GB, If you have bigger GPU, you can try bigger value to reduce the training time. Basically, you should only change the <b>file_train, model_dir and temp_data_folder</b>, if you don't understand other parameters.
+This created json file will be the parameter for python train_bart.py
 
 #### 2.3 Training model
 
