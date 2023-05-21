@@ -181,17 +181,27 @@ def train(config):
     logging.info(f'Training time: {(t2 - t1)} seconds')
 
 
-def get_default_config() -> dict:
+def get_default_config(file_config) -> dict:
     """load configs in json file"""
-    with open("config.json", "r") as fp:
+    with open(file_config, "r") as fp:
         configs = json.load(fp)
         return configs
 
 
-def main():
-    config = get_default_config()
+def main(file_config: str):
+    config = get_default_config(file_config)
     train(config)
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Training Model')
+    parser.add_argument('--config',
+                        type=str,
+                        help='file config',
+                        required=True)
+
+    args = parser.parse_args()
+    print(args)
+    main(args.config)

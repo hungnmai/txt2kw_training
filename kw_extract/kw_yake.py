@@ -145,12 +145,13 @@ def gen_training_data(path_read: str, path_save: str = None):
             item = gen_training_example(title)
             items.append(item)
     train_data, eval_data = train_test_split(items, test_size=0.1, random_state=42)
-
+    if not os.path.exists(path_save):
+        os.makedirs(path_save)
     if path_save:
-        with open(os.path.join(path_save, "train_span.json", "w")) as fp:
+        with open(os.path.join(path_save, "train_span.json"), "w") as fp:
             json.dump(train_data, fp, ensure_ascii=False, indent=4)
 
-        with open(os.path.join(path_save, "dev_span.json", "w")) as fp:
+        with open(os.path.join(path_save, "dev_span.json"), "w") as fp:
             json.dump(eval_data, fp, ensure_ascii=False, indent=4)
 
     return train_data, eval_data
