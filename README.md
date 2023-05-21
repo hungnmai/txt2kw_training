@@ -42,7 +42,8 @@ Before training the model, make sure to configure the following parameters:
   "seed": 10,
   "decoder_max_length": 80,
   "save_folder": "./models",
-  "file_train": "./data/title.txt"
+  "file_train": "./data/title.txt",
+  "folder_save": "./data"
 }
 ```
 
@@ -53,6 +54,7 @@ Here's a brief explanation of each parameter:
 * eval_batch_size: The batch size for evaluation data. Adjust as needed.
 * save_folder: The folder where the trained model will be saved.
 * file_train: The path to the text file containing the training data.
+* file_train: Folder to save data training
 
 Make sure to update these parameters according to your specific requirements before initiating the training process.
 

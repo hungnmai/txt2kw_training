@@ -15,8 +15,8 @@ from transformers import BartForConditionalGeneration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def read_qa_data(file_train):
-    train_data, dev_data = gen_training_data(file_train)
+def read_qa_data(file_train, folder_save):
+    train_data, dev_data = gen_training_data(file_train, folder_save)
     dataset = DatasetDict(
         {"train": Dataset.from_list(train_data),
          "dev": Dataset.from_list(dev_data)}
@@ -108,8 +108,10 @@ def train(config):
     logging.info("Start to training with config: ")
     logging.info(str(config))
     file_train = config['file_train']
+    folder_save = config['folder_save']
+
     logging.info(f"File training: {file_train}")
-    ds = read_qa_data(file_train)
+    ds = read_qa_data(file_train, folder_save)
     pretrained = config['pretrained']
     logging.info("Loading pretrained model: " + str(pretrained))
     tokenizer = BartTokenizer.from_pretrained(pretrained)

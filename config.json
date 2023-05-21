@@ -8,5 +8,6 @@
   "seed": 10,
   "decoder_max_length": 80,
   "save_folder": "./models",
-  "file_train": "./data/title.txt"
+  "file_train": "./data/title.txt",
+  "folder_save": "./data"
 }
