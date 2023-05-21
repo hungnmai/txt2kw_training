@@ -15,8 +15,8 @@ from transformers import BartForConditionalGeneration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def read_qa_data(file_train, folder_save):
-    train_data, dev_data = gen_training_data(file_train, folder_save)
+def read_qa_data(file_train, temp_data_folder):
+    train_data, dev_data = gen_training_data(file_train, temp_data_folder)
     dataset = DatasetDict(
         {"train": Dataset.from_list(train_data),
          "dev": Dataset.from_list(dev_data)}
@@ -108,15 +108,15 @@ def train(config):
     logging.info("Start to training with config: ")
     logging.info(str(config))
     file_train = config['file_train']
-    folder_save = config['folder_save']
+    temp_data_folder = config['temp_data_folder']
 
     logging.info(f"File training: {file_train}")
-    ds = read_qa_data(file_train, folder_save)
+    ds = read_qa_data(file_train, temp_data_folder)
     pretrained = config['pretrained']
     logging.info("Loading pretrained model: " + str(pretrained))
     tokenizer = BartTokenizer.from_pretrained(pretrained)
     add_special_token(tokenizer)
-    tokenizer.save_pretrained(config['save_folder'])
+    tokenizer.save_pretrained(config['model_dir'])
     decoder_max_length = config['decoder_max_length']
 
     def preprocess_examples(batch):
@@ -148,13 +148,13 @@ def train(config):
     model.resize_token_embeddings(len(tokenizer))
     train_args = TrainingArguments(
         disable_tqdm=False,
-        output_dir=config.get('save_folder', "models"),
+        output_dir=config.get('model_dir', "models"),
         num_train_epochs=config.get("epoch_num", 3),  # total # of training epochs
         per_device_train_batch_size=config.get("train_batch_size", 64),  # batch size per device during training
         per_device_eval_batch_size=config.get('eval_batch_size', 64),  # batch size for evaluation
         warmup_steps=config.get('warm_up', 3),  # number of warmup steps for learning rate scheduler
         weight_decay=config.get('weight_decay', 0.01),  # strength of weight decay
-        logging_dir=config.get('save_folder', "models"),  # directory for storing logs
+        logging_dir=config.get('model_dir', "models"),  # directory for storing logs
         learning_rate=config.get("learning_rate", 4e-5),
         gradient_accumulation_steps=1,
         do_eval=True,
@@ -171,7 +171,7 @@ def train(config):
     )
     t1 = datetime.datetime.now()
     if 'check_point' in config:
-        path_to_checkpoint = config['save_folder'] + '/' + config['check_point']
+        path_to_checkpoint = config['model_dir'] + '/' + config['check_point']
         logging.info(f'Continue to train from checkpoint: {path_to_checkpoint}', )
         trainer.train(path_to_checkpoint)
     else:

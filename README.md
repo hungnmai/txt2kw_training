@@ -41,9 +41,9 @@ Before training the model, make sure to configure the following parameters:
   "weight_decay": 0.01,
   "seed": 10,
   "decoder_max_length": 80,
-  "save_folder": "./models",
+  "model_dir": "./models",
   "file_train": "./data/title.txt",
-  "folder_save": "./data"
+  "temp_data_folder": "./data"
 }
 ```
 
@@ -52,9 +52,9 @@ Here's a brief explanation of each parameter:
 * epoch_num: The number of training epochs to perform. You should set 2-3 epochs to get good result.
 * train_batch_size: The batch size for training data. Modify this value depending on your available resources.
 * eval_batch_size: The batch size for evaluation data. Adjust as needed.
-* save_folder: The folder where the trained model will be saved.
+* model_dir: The folder where the trained model will be saved.
 * file_train: The path to the text file containing the training data.
-* file_train: Folder to save data training
+* temp_data_folder: Folder to save data training
 
 Make sure to update these parameters according to your specific requirements before initiating the training process.
 
@@ -62,5 +62,10 @@ Make sure to update these parameters according to your specific requirements bef
 
 ```shell
 conda activate keyword2title
-python train_bart.py
+python train_bart.py --config path_to_config_file
+```
+
+For example:
+```shell
+python train_bart.py --config config.json
 ```

@@ -37,7 +37,7 @@ class YakeExtraction:
                  window_size: int = 1,
                  deduplication_threshold: float = 0.9,
                  deduplication_algo: str = 'seqm',
-                 num_keywords: int = 3,
+                 num_keywords: int = 2,
                  language: str = "en"):
         self.max_ngram_size = max_ngram_size
         self.kw_extractor = yake.KeywordExtractor(lan=language,
