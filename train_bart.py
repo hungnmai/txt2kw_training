@@ -17,6 +17,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def read_qa_data(file_train, temp_data_folder):
     train_data, dev_data = gen_training_data(file_train, temp_data_folder)
+    print("train_data: ", len(train_data))
+    print("train_data: ", len(dev_data))
     dataset = DatasetDict(
         {"train": Dataset.from_list(train_data),
          "dev": Dataset.from_list(dev_data)}

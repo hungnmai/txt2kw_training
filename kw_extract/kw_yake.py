@@ -67,16 +67,16 @@ class KeywordExtraction:
         self.max_words_in_span = max_words_in_span
         self.max_spans = max_spans
 
-    def random_sublist(self, lst, sublist_length):
-        if sublist_length >= len(lst):
-            return lst
-
-        lst_copy = lst.copy()
-
-        random.shuffle(lst_copy)
-        sublist = lst_copy[:sublist_length]
-
-        return sublist
+    # def random_sublist(self, lst, sublist_length):
+    #     if sublist_length >= len(lst):
+    #         return lst
+    #
+    #     lst_copy = lst.copy()
+    #
+    #     random.shuffle(lst_copy)
+    #     sublist = lst_copy[:sublist_length]
+    #
+    #     return sublist
 
     def extract(self, text: str) -> List:
         """
@@ -93,8 +93,8 @@ class KeywordExtraction:
             spans_list.extend(spans)
 
         spans_list = list(set(spans_list))
-        sublist = self.random_sublist(spans_list, self.max_spans)
-        return sublist
+        # sublist = self.random_sublist(spans_list, self.max_spans)
+        return spans_list
 
 
 kw_extractor = KeywordExtraction()
@@ -166,7 +166,8 @@ def gen_training_data(path_read: str, path_save: str = None):
 
         with open(os.path.join(path_save, "dev_span.json"), "w") as fp:
             json.dump(eval_data, fp, ensure_ascii=False, indent=4)
-
+    print("eval_data: ", len(eval_data))
+    print("train_data: ", len(train_data))
     return train_data, eval_data
 
 
