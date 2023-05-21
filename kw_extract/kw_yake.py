@@ -63,7 +63,7 @@ class YakeExtraction:
 
 
 class KeywordExtraction:
-    def __init__(self, max_words_in_span: int = 5, max_spans: int = 6):
+    def __init__(self, max_words_in_span: int = 3, max_spans: int = 6):
         self.max_words_in_span = max_words_in_span
         self.max_spans = max_spans
 
