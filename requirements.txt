@@ -1,4 +1,6 @@
+yake
 validators==0.20.0
 torch
 datasets
 transformers
+sklearn

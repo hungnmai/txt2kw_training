@@ -1,13 +1,13 @@
-import os
 import json
 import torch
 import logging
 import datetime
-from datasets import load_dataset
 from torch.utils.data import DataLoader
 from transformers import BartTokenizer
 from transformers.trainer import Trainer
 from transformers import TrainingArguments
+from datasets import Dataset, DatasetDict
+from kw_extract.kw_yake import gen_training_data
 from transformers import BartForConditionalGeneration
 
 
@@ -15,32 +15,32 @@ from transformers import BartForConditionalGeneration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def read_qa_data(data_folder):
-    dic_path = {
-        'train': os.path.join(data_folder, 'train_span.json'),
-        'dev': os.path.join(data_folder, 'dev_span.json')
-    }
-    dataset = load_dataset('json', data_files=dic_path)
+def read_qa_data(file_train):
+    train_data, dev_data = gen_training_data(file_train)
+    dataset = DatasetDict(
+        {"train": Dataset.from_list(train_data),
+         "dev": Dataset.from_list(dev_data)}
+    )
     return dataset
 
 
 def print_random_records(ds, tokenizer):
-    print('padding_id: ', tokenizer.pad_token_id)
+    # logging.info(f'padding_id: {tokenizer.pad_token_id}')
     data_loader = DataLoader(ds, batch_size=3, collate_fn=customize_collate)
     count = 0
     for batch in data_loader:
         if count > 5:
             continue
-        print('---------------------------------')
-        print('length of this batch: ', batch['input_ids'].size(-1))
-        print(batch)
+        logging.info('---------------------------------')
+        logging.info(f"""length of this batch: {batch['input_ids'].size(-1)}""")
+        # logging.info(batch)
         batch_size = batch['input_ids'].size(0)
         for i in range(batch_size):
-            print('encoder: ', tokenizer.decode(batch['input_ids'][i].tolist()))
+            # logging.info('encoder: ', tokenizer.decode(batch['input_ids'][i].tolist()))
             # print('decoder: ', tokenizer.decode(batch['decoder_input_ids'][i].tolist()))
             label_ids = batch['labels'][i].tolist()
             label_ids = [item for item in label_ids if item != -100]
-            print('labels: ', tokenizer.decode(label_ids))
+            # logging.info(f'labels: {tokenizer.decode(label_ids)}' )
         count += 1
 
 
@@ -105,10 +105,11 @@ def get_kw_from_question(question):
 
 
 def train(config):
-    logging.info("start to training with config")
+    logging.info("Start to training with config: ")
     logging.info(str(config))
-    data_folder = config['data_folder']
-    ds = read_qa_data(data_folder)
+    file_train = config['file_train']
+    logging.info(f"File training: {file_train}")
+    ds = read_qa_data(file_train)
     pretrained = config['pretrained']
     logging.info("Loading pretrained model: " + str(pretrained))
     tokenizer = BartTokenizer.from_pretrained(pretrained)
@@ -145,13 +146,13 @@ def train(config):
     model.resize_token_embeddings(len(tokenizer))
     train_args = TrainingArguments(
         disable_tqdm=False,
-        output_dir=config.get('save_folder', "models/v5"),
+        output_dir=config.get('save_folder', "models"),
         num_train_epochs=config.get("epoch_num", 3),  # total # of training epochs
         per_device_train_batch_size=config.get("train_batch_size", 64),  # batch size per device during training
         per_device_eval_batch_size=config.get('eval_batch_size', 64),  # batch size for evaluation
         warmup_steps=config.get('warm_up', 3),  # number of warmup steps for learning rate scheduler
         weight_decay=config.get('weight_decay', 0.01),  # strength of weight decay
-        logging_dir=config.get('save_folder', "models/v5"),  # directory for storing logs
+        logging_dir=config.get('save_folder', "models"),  # directory for storing logs
         learning_rate=config.get("learning_rate", 4e-5),
         gradient_accumulation_steps=1,
         do_eval=True,
@@ -169,25 +170,24 @@ def train(config):
     t1 = datetime.datetime.now()
     if 'check_point' in config:
         path_to_checkpoint = config['save_folder'] + '/' + config['check_point']
-        print('continue to train from checkpoint: ', path_to_checkpoint)
+        logging.info(f'Continue to train from checkpoint: {path_to_checkpoint}', )
         trainer.train(path_to_checkpoint)
     else:
         trainer.train()
     t2 = datetime.datetime.now()
     trainer.evaluate()
-    print('training time: %f seconds' % (t2 - t1).total_seconds())
+    logging.info(f'Training time: {(t2 - t1)} seconds')
 
 
 def get_default_config() -> dict:
     """load configs in json file"""
-    with open("config.json", "w") as fp:
+    with open("config.json", "r") as fp:
         configs = json.load(fp)
         return configs
 
 
 def main():
     config = get_default_config()
-    config['data_folder'] = 'v5'
     train(config)
 
 

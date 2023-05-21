@@ -35,3 +35,4 @@ htmlcov/
 *.swo
 .DS_Store
 /data
+/models
