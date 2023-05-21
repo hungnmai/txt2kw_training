@@ -56,8 +56,8 @@ Here's a brief explanation of each parameter:
 * file_train: The path to the text file containing the training data.
 * temp_data_folder: Folder to save generated training data.
 
-Currently, train_batch_size is set as 96 to fit a GPU with 12GB, If you have bigger GPU, you can try bigger value to reduce the training time. Basically, you should only change the <b>file_train, model_dir and temp_data_folder</b>, if you don't understand other parameters.
-This created json file will be the parameter for python train_bart.py
+Currently, train_batch_size is set as 96 to fit GPU: 16GB Tesla T4 (free colab GPU), If you have bigger GPU, you can try bigger value to reduce the training time. Basically, you should only change the <b>file_train, model_dir and temp_data_folder</b> if you don't understand other parameters.
+This created json file will be the parameter for ``python train_bart.py``
 
 #### 2.3 Training model
 
@@ -65,6 +65,7 @@ This created json file will be the parameter for python train_bart.py
 conda activate keyword2title
 python train_bart.py --config path_to_config_file
 ```
+path_to_config_file: is described in <b>2.2 Configuration</b>
 
 For example:
 ```shell
