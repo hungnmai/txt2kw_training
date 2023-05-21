@@ -42,7 +42,7 @@ Before training the model, make sure to configure the following parameters:
   "seed": 10,
   "decoder_max_length": 80,
   "model_dir": "./models",
-  "file_train": "./data/title.txt",
+  "file_train": "./title_example.txt",
   "temp_data_folder": "./data"
 }
 ```
