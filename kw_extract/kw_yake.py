@@ -4,6 +4,7 @@ import yake
 import uuid
 import random
 import os.path
+import nltk
 import itertools
 from tqdm import tqdm
 from utils import root_path
@@ -14,6 +15,7 @@ from text_processing import preprocess_title
 from sklearn.model_selection import train_test_split
 from kw_extract.url_detection import extract_domain_url
 
+nltk.download('stopwords')
 stopwords = stopwords.words('english')
 
 
@@ -35,7 +37,7 @@ class YakeExtraction:
                  window_size: int = 1,
                  deduplication_threshold: float = 0.9,
                  deduplication_algo: str = 'seqm',
-                 num_keywords: int = 5,
+                 num_keywords: int = 3,
                  language: str = "en"):
         self.max_ngram_size = max_ngram_size
         self.kw_extractor = yake.KeywordExtractor(lan=language,

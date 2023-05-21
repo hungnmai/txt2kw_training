@@ -31,8 +31,8 @@ def print_random_records(ds, tokenizer):
     for batch in data_loader:
         if count > 5:
             continue
-        logging.info('---------------------------------')
-        logging.info(f"""length of this batch: {batch['input_ids'].size(-1)}""")
+        # logging.info('---------------------------------')
+        # logging.info(f"""length of this batch: {batch['input_ids'].size(-1)}""")
         # logging.info(batch)
         batch_size = batch['input_ids'].size(0)
         for i in range(batch_size):
@@ -164,7 +164,7 @@ def train(config):
         args=train_args,  # training arguments, defined above
         train_dataset=train_ds,  # training dataset
         eval_dataset=dev_ds,  # evaluation dataset
-        data_collator=customize_collate
+        data_collator=customize_collate,
         # compute_metrics=compute_metrics
     )
     t1 = datetime.datetime.now()
