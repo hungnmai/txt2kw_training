@@ -63,8 +63,20 @@ class YakeExtraction:
 
 
 class KeywordExtraction:
-    def __init__(self, max_words_in_span: int = 5):
+    def __init__(self, max_words_in_span: int = 5, max_spans: int = 6):
         self.max_words_in_span = max_words_in_span
+        self.max_spans = max_spans
+
+    def random_sublist(self, lst, sublist_length):
+        if sublist_length >= len(lst):
+            return lst
+
+        lst_copy = lst.copy()
+
+        random.shuffle(lst_copy)
+        sublist = lst_copy[:sublist_length]
+
+        return sublist
 
     def extract(self, text: str) -> List:
         """
@@ -81,7 +93,8 @@ class KeywordExtraction:
             spans_list.extend(spans)
 
         spans_list = list(set(spans_list))
-        return spans_list
+        sublist = self.random_sublist(spans_list, self.max_spans)
+        return sublist
 
 
 kw_extractor = KeywordExtraction()
