@@ -56,7 +56,7 @@ Here's a brief explanation of each parameter:
 * file_train: The path to the text file containing the training data.
 * temp_data_folder: Folder to save generated training data.
 
-Currently, train_batch_size is set as 96 to fit GPU: 16GB Tesla T4 (free colab GPU), If you have bigger GPU, you can try bigger value to reduce the training time. Basically, you should only change the <b>file_train, model_dir and temp_data_folder</b> if you don't understand other parameters.
+Currently, train_batch_size is set as 96 to fit GPU 16GB Tesla T4 (free colab GPU), If you have bigger GPU, you can try bigger value to reduce the training time. Basically, you should only change the <b>file_train, model_dir and temp_data_folder</b> if you don't understand other parameters.
 This created json file will be the parameter for ``python train_bart.py``
 
 #### 2.3 Training model
@@ -71,3 +71,5 @@ For example:
 ```shell
 python train_bart.py --config config.json
 ```
+
+<b>The training time depends on the number of titles in file_train. With the current file_train=title_example.txt, the training time on free Goole Colab (16GB Tesla T4) for 3 epochs is: 4916 seconds ~ 1.36 hours </b>
