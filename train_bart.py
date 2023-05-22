@@ -1,6 +1,7 @@
 import json
 import torch
 import logging
+import os
 import datetime
 from torch.utils.data import DataLoader
 from transformers import BartTokenizer
@@ -105,7 +106,15 @@ def get_kw_from_question(question):
     kw = [p.strip() for p in parts]
     return kw
 
+def save_tokenizer_to_checkpoint(model_dir, tokenizer):
+    for name in os.listdir(model_dir):
+        if name.startswith("checkpoint-"):
+            checkpoint_folder = os.path.join(model_dir, name)
+            if os.path.isdir(checkpoint_folder):
+                print("save tokenizer to: ", checkpoint_folder)
+                tokenizer.save_pretrained(checkpoint_folder)
 
+                
 def train(config):
     logging.info("Start to training with config: ")
     logging.info(str(config))
@@ -180,6 +189,7 @@ def train(config):
         trainer.train()
     t2 = datetime.datetime.now()
     trainer.evaluate()
+    save_tokenizer_to_checkpoint(config['model_dir'], tokenizer)
     logging.info(f'Training time: {(t2 - t1)} seconds')
 
 
