@@ -153,10 +153,10 @@ def gen_training_data(path_read: str, path_save: str = None):
     items = []
     with open(path_read, "r") as fp:
         titles = [preprocess_title(title) for title in fp.readlines()]
-
         for title in tqdm(titles, desc="Load and build dataset"):
             item = gen_training_example(title)
-            items.append(item)
+            if item is not None:
+                items.append(item)
     train_data, eval_data = train_test_split(items, test_size=0.1, random_state=42)
     if not os.path.exists(path_save):
         os.makedirs(path_save)
